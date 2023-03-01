@@ -7,10 +7,10 @@ class SalCalculator{
 
     public void CalculateSalary(HashMap<Employee, Integer> empAttendance){
         if(empAttendance.keySet().size()!=0){
-            System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             System.out.format("%10s %20s %20s %20s %20s %20s %20s %20s %20s", "Employee ID", "Name", "Designation", "Department", "Salary", "Allowance", "PF", "Gross Salary", "Net Salary");
             System.out.println();
-            System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             for(Employee emp: empAttendance.keySet()){
                 double pf, sal;
                 double allowance = 0, grossSalary = 0, netSalary = 0;
@@ -29,7 +29,7 @@ class SalCalculator{
                 System.out.format("%10s %20s %20s %20s %20s %20s %20s %20s %20s", emp.getEmpID(),emp.getName(), emp.getDesg(), emp.getDept(), sal, allowance,pf, grossSalary, netSalary);
                 System.out.println();
             }
-
+            System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         }
     }
 }
