@@ -12,9 +12,9 @@ public class AttendanceMaster {
 
     public void showEligibleList(){
         int eligibleCount = 0;
-        System.out.println("---------- Eligible employees ----------\n");
+        System.out.println("Eligible employees\n");
         ArrayList<Employee> emList = new ArrayList<Employee>(this.empAtten.keySet());
-
+        System.out.println("-------------------------------------------------------------------------------------------------");
         System.out.format("%10s %20s %20s %20s %20s", "Employee ID", "Name", "Designation", "Department", "Salary");
         System.out.println();
         System.out.println("-------------------------------------------------------------------------------------------------");
@@ -24,6 +24,7 @@ public class AttendanceMaster {
                 eligibleCount++;
             }
         }
+        System.out.println("-------------------------------------------------------------------------------------------------");
 
         if(eligibleCount == 0){
             System.out.println("No employees eligible\n");
