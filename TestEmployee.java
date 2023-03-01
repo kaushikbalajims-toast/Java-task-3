@@ -13,19 +13,8 @@ public class TestEmployee{
         
         while(true){
             Employee employee = new Employee();
-            do{
-                invalidInput = false; 
-                try{
-                    System.out.print("---- Menu ----\n1.Add employees\n2.Display Employees list\n3.Add all employee attendance\n4.Update Attendance for an Employee ID\n5.Show Eligible Employees\n6.Filter Employees\n7.sort\n8.Provide salary\n9.Exit\nEnter choice: ");
-                    choice = Integer.parseInt(scin.nextLine());
-                }
-                catch(NumberFormatException e){
-                    System.out.println("Enter valid menu option (only numbers)\n");
-                    invalidInput = true;
-                }
-            }while(invalidInput); // proper choice at this point
-            // choice = getAnInteger(1, 1, 0);
-
+            String menuOptions = "---- Menu ----\n1.Add employees\n2.Display Employees list\n3.Add all employee attendance\n4.Update Attendance for an Employee ID\n5.Show Eligible Employees\n6.Filter Employees\n7.sort\n8.Provide salary\n9.Exit\nEnter choice: ";
+            choice = ValidMenuOption(menuOptions, 1, 9);
             if(choice == 1){      // when adding employee
                 employee.setName(""); //to validate name
                 employee.setDesg(""); //to validate department
@@ -36,7 +25,7 @@ public class TestEmployee{
                 System.out.println();
             }
             else if(choice == 2){
-                mData.displayEmployees();    
+                mData.displayEmployees(employees);    
             }
 
             else if(choice == 3){
@@ -133,16 +122,12 @@ public class TestEmployee{
                 if(am.getEmpAtten().size()!=0){
                     am.FilterEmployeeList();
                     isFiltered = true;
-                    System.out.println("---- Eligible employees after filtering ----");
-                    System.out.format("%10s %20s %20s %20s %20s", "Employee ID", "Name", "Designation", "Department", "Salary");
-                    System.out.println();
-                    System.out.println("-------------------------------------------------------------------------------------------------");
-                    for (Employee emp : am.getEmpAtten().keySet()) {
-                        System.out.println(emp.toString());
-                    }
+                    System.out.println("Eligible employees after filtering\n");
+                    ArrayList<Employee> temp = new ArrayList<Employee>(am.getEmpAtten().keySet());
+                    mData.displayEmployees(temp);
                 }
                 else{
-                    System.out.println("Filter employees after providing attendance ..... choose menu choice 2 to add attendance\n");
+                    System.out.println("Filter employees after providing attendance ..... choose menu choice 3 to add attendance\n");
                 }
             }
 
@@ -150,30 +135,32 @@ public class TestEmployee{
                 int sortChoice = 0;
                 if(employees.size()!=0){
                     while(true){
-                        do{
-                            invalidInput = false; 
-                            try{
-                                System.out.println("Sorting Menu\n1.Sort by ID Acsending\n2.Sort by ID Descending\n3.Sort by Name Ascending\n4.Sort by Name Descending\n5.Sort by Designation Ascending\n6.Sort by Designation Descending\n7.Sort by Department Ascending\n8.Sort by Department Descending\n9.Exit sorting\nEnter choice: ");
-                                sortChoice = Integer.parseInt(scin.nextLine());
-                            }
-                            catch(NumberFormatException e){
-                                System.out.println("Enter valid menu option (only numbers)\n");
-                                invalidInput = true;
-                            }
-                            if((sortChoice<1 || sortChoice>9) && !invalidInput){
-                                System.out.println("Enter valid menu option (1-9)");
-                                invalidInput = true;
-                            }
-                        }while(invalidInput); // proper choice at this point
-
-                        if(sortChoice == 9){
+                        menuOptions = "Sorting Menu\n1.Sort by Name Ascending\n2.Sort by Name Descending\n3.Sort by Designation Ascending\n4.Sort by Designation Descending\n5.Sort by Department Ascending\n6.Sort by Department Descending\n7.Exit sorting\nEnter choice: ";
+                        sortChoice = ValidMenuOption(menuOptions, 1, 7);
+                        if(sortChoice == 7){
                             break;
                         }
                         else{
-                            Quicksort(employees, 0, employees.size()-1, sortChoice);
-                            for (Employee emp : employees) {
-                                System.out.println(emp.toString());
+                            if(sortChoice == 1){
+                                Collections.sort(employees, new NameSorting());
                             }
+                            else if(sortChoice == 2){
+                                Collections.sort(employees, new NameSorting().reversed());
+                            }
+                            else if(sortChoice == 3){
+                                Collections.sort(employees, new DesignationSorting());
+                            }
+                            else if(sortChoice == 4){
+                                Collections.sort(employees, new DesignationSorting().reversed());
+                            }
+                            else if(sortChoice == 5){
+                                Collections.sort(employees, new DepartmentSorting());
+                            }
+                            else if(sortChoice == 6){
+                                Collections.sort(employees, new DepartmentSorting().reversed());
+                            }
+
+                            mData.displayEmployees(employees);
                         }
                     }    
                 }
@@ -196,67 +183,49 @@ public class TestEmployee{
                 System.out.println("Bye Bye");
                 System.exit(0);
             }
-
-            else{
-                System.out.println("Enter valid menu option");
-            }
         }
     }
 
 
-    public static int Partition(ArrayList<Employee> employees, int start, int end, int sortChoice){
-        String pivot = "";
-        String val = "";
-        int pIndex = start;
+    public static int ValidMenuOption(String menu, int start, int end){
+        int val = 0;
+        boolean invalidInput;
+        Scanner scin = new Scanner(System.in);
+        do{
+            invalidInput = false; 
+            try{
+                System.out.print(menu);
+                val = Integer.parseInt(scin.nextLine());
+            }
+            catch(NumberFormatException e){
+                System.out.println("Enter valid menu option (only numbers)\n");
+                invalidInput = true;
+            }
+            if((val<start || val>end) && !invalidInput){
+                System.out.println("Enter valid menu option ("+start+"-"+end+")");
+                invalidInput = true;
+            }
+        }while(invalidInput); // proper choice at this point
+        return val;
+    } 
+}
 
-        for (int i = start; i < end; i++) {
-            if(sortChoice == 1 || sortChoice == 2){
-                val = ""+employees.get(i).getEmpID();
-                pivot = ""+employees.get(end).getEmpID();
-            }
-            else if(sortChoice == 3 || sortChoice == 4){
-                val = employees.get(i).getName();
-                pivot = employees.get(end).getName();
-            }
-            else if(sortChoice == 5 || sortChoice == 6){
-                val = employees.get(i).getDesg();
-                pivot = employees.get(end).getDesg();
-            }
-            else if(sortChoice == 7 || sortChoice == 8){
-                val = employees.get(i).getDept();
-                pivot = employees.get(end).getDept();
-            }
 
-            if(sortChoice%2 == 1){
-                if(val.compareTo(pivot) < 0){
-                    Employee temp = employees.get(i);
-                    employees.set(i, employees.get(pIndex));
-                    employees.set(pIndex, temp);
-                    pIndex++;
-                }    
-            }
-            else{
-                if(val.compareTo(pivot) > 0){
-                    Employee temp = employees.get(i);
-                    employees.set(i, employees.get(pIndex));
-                    employees.set(pIndex, temp);
-                    pIndex++;
-                }
-            }
-        }
 
-        Employee temp = employees.get(end);
-        employees.set(end, employees.get(pIndex));
-        employees.set(pIndex, temp);
-
-        return pIndex;
+// Overriding Comparators to sort various features
+class NameSorting implements Comparator<Employee>{
+    @Override public int compare(Employee emp1, Employee emp2){
+        return emp1.getName().compareTo(emp2.getName());
     }
+}
+class DesignationSorting implements Comparator<Employee>{
+    @Override public int compare(Employee emp1, Employee emp2){
+        return emp1.getDesg().compareTo(emp2.getDesg());
+    }
+}
 
-    public static void Quicksort(ArrayList<Employee> employees, int start, int end, int sortChoice){
-        if(start<end){
-            int p = Partition(employees, start, end, sortChoice);
-            Quicksort(employees, start, (p-1), sortChoice);
-            Quicksort(employees, (p+1), end, sortChoice);
-        }
+class DepartmentSorting implements Comparator<Employee>{
+    @Override public int compare(Employee emp1, Employee emp2){
+        return emp1.getDept().compareTo(emp2.getDept());
     }
 }

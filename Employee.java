@@ -95,21 +95,21 @@ class Employee{
                 starting = false;
             }
             invalidInput = false;
-                try{
-                    dept_choice = Integer.parseInt(dept);
-                }
-                catch(NumberFormatException e){
-                    System.out.println("Enter only one integer option\n");
-                    invalidInput = true;
-                    System.out.print("\nDepartment choices \n1.R & D\n2.IT\n3.Admin\n4.HR\n5.Support\nEnter department choice:");
-                    dept = scin.nextLine();
-                }
-                if((dept_choice>5 || dept_choice<0) && !invalidInput){
-                    System.out.println("Enter an available option (1-5)\n");
-                    System.out.print("\nDepartment choices \n1.R & D\n2.IT\n3.Admin\n4.HR\n5.Support\nEnter department choice:");
-                    invalidInput = true;
-                    dept = scin.nextLine();        
-                }
+            try{
+                dept_choice = Integer.parseInt(dept);
+            }
+            catch(NumberFormatException e){
+                System.out.println("Enter only one integer option\n");
+                invalidInput = true;
+                System.out.print("\nDepartment choices \n1.R & D\n2.IT\n3.Admin\n4.HR\n5.Support\nEnter department choice:");
+                dept = scin.nextLine();
+            }
+            if((dept_choice>5 || dept_choice<0) && !invalidInput){
+                System.out.println("Enter an available option (1-5)\n");
+                System.out.print("\nDepartment choices \n1.R & D\n2.IT\n3.Admin\n4.HR\n5.Support\nEnter department choice:");
+                invalidInput = true;
+                dept = scin.nextLine();        
+            }
         }while(invalidInput);
         this.department = department_array[dept_choice-1];
     }
