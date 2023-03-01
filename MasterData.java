@@ -20,8 +20,8 @@ public class MasterData {
             for (Employee emp : employees) {
                 System.out.println(emp.toString());
             }
+            System.out.println("-------------------------------------------------------------------------------------------------");
         }
-        System.out.println();
     }
 
     public ArrayList<Employee> getEmpList(){
@@ -31,5 +31,4 @@ public class MasterData {
     public void setEmpList(ArrayList<Employee> employeeList){
         this.empList = employeeList;
     }
-
 }
