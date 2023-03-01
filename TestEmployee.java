@@ -13,7 +13,7 @@ public class TestEmployee{
         
         while(true){
             Employee employee = new Employee();
-            String menuOptions = "---- Menu ----\n1.Add employees\n2.Display Employees list\n3.Add all employee attendance\n4.Update Attendance for an Employee ID\n5.Show Eligible Employees\n6.Filter Employees\n7.sort\n8.Provide salary\n9.Exit\nEnter choice: ";
+            String menuOptions = "\n---- Menu ----\n1.Add employees\n2.Display Employees list\n3.Add all employee attendance\n4.Update Attendance for an Employee ID\n5.Show Eligible Employees\n6.Filter Employees\n7.sort\n8.Provide salary\n9.Exit\nEnter choice: ";
             choice = ValidMenuOption(menuOptions, 1, 9);
             if(choice == 1){      // when adding employee
                 employee.setName(""); //to validate name
@@ -33,7 +33,7 @@ public class TestEmployee{
                 if(empList.size()>0){
                     for (Employee emp : empList){
                         invalidInput = false;
-                        empHash.put(emp, GetAttendance(emp.getEmpID()));  //valid attendance inserted to hashmap
+                        empHash.put(emp, GetAttendanceAndID(emp.getEmpID(), 1, 30));  //valid attendance inserted to hashmap
                     }
                 }
                 else{
@@ -42,36 +42,20 @@ public class TestEmployee{
             }
 
             else if(choice == 4){
-                do{
-                    invalidInput = false;
-                    if(employees.size() == 0){
-                        System.out.println("No employee to update attendance to");
-                        invalidInput = true;
-                        break;
-                    }
-                    else{
-                        try{
-                            System.out.print("Enter employee id to update attendance: ");
-                            idToFind = Integer.parseInt(scin.nextLine());
-                        }
-                        catch(NumberFormatException e){
-                            System.out.println("Enter valid Id number");
-                            invalidInput = true;
-                        }
-                        if(!(!invalidInput && (idToFind>1000 && (idToFind<=employees.size()+1000)))){
-                            System.out.println("Enter an available employee ID\n");
-                            invalidInput = true;
-                        }    
-                    }
-                }while(invalidInput);
-                if(empHash.get(employeeIdMapping.get(idToFind)) == null){
-                    System.out.println("\nOld attendence: 0 days");
+                if(employees.size() == 0){
+                    System.out.println("No employee to update attendance to");
                 }
                 else{
-                    System.out.println("Old attendence: " + empHash.get(employeeIdMapping.get(idToFind)));
+                    idToFind = GetAttendanceAndID(0, 1001, employees.size()+1000);
+                    if(empHash.get(employeeIdMapping.get(idToFind)) == null){
+                        System.out.println("\nOld attendence: 0 days");
+                    }
+                    else{
+                        System.out.println("Old attendence: " + empHash.get(employeeIdMapping.get(idToFind)));
+                    }
+                    empHash.put(employeeIdMapping.get(idToFind), GetAttendanceAndID(idToFind, 1, 30));
+                    isFiltered = false;
                 }
-                empHash.put(employeeIdMapping.get(idToFind), GetAttendance(idToFind));
-                isFiltered = false;
             }
 
             else if(choice == 5){
@@ -101,7 +85,7 @@ public class TestEmployee{
                 int sortChoice = 0;
                 if(employees.size()!=0){
                     while(true){
-                        menuOptions = "Sorting Menu\n1.Sort by Name Ascending\n2.Sort by Name Descending\n3.Sort by Designation Ascending\n4.Sort by Designation Descending\n5.Sort by Department Ascending\n6.Sort by Department Descending\n7.Exit sorting\nEnter choice: ";
+                        menuOptions = "\n---- Sorting Menu ----\n1.Sort by Name Ascending\n2.Sort by Name Descending\n3.Sort by Designation Ascending\n4.Sort by Designation Descending\n5.Sort by Department Ascending\n6.Sort by Department Descending\n7.Exit sorting\nEnter choice: ";
                         sortChoice = ValidMenuOption(menuOptions, 1, 7);
                         if(sortChoice == 7){
                             break;
@@ -125,7 +109,6 @@ public class TestEmployee{
                             else if(sortChoice == 6){
                                 Collections.sort(employees, new DepartmentSorting().reversed());
                             }
-
                             mData.displayEmployees(employees);
                         }
                     }    
@@ -147,11 +130,11 @@ public class TestEmployee{
 
             else if(choice == 9){
                 System.out.println("Bye Bye");
+                scin.close();
                 System.exit(0);
             }
         }
     }
-
 
     public static int ValidMenuOption(String menu, int start, int end){
         int val = 0;
@@ -175,26 +158,36 @@ public class TestEmployee{
         return val;
     }
     
-    public static int GetAttendance(int idToFind){
-        int attendance = 0;
+    public static int GetAttendanceAndID(int idToFind, int start, int end){
+        int value = 0;
         boolean invalidInput;
         Scanner scin1 = new Scanner(System.in);
         do{
             invalidInput = false;
             try{
-                System.out.print("Enter attendance for the employee " + idToFind +":  ");
-                attendance = Integer.parseInt(scin1.nextLine());
+                if(end == 30){
+                    System.out.print("Enter attendance for the employee " + idToFind +":  ");
+                }
+                else{
+                    System.out.print("Enter employee id to update attendance: ");
+                }          
+                value = Integer.parseInt(scin1.nextLine());
             }
             catch(NumberFormatException e){
-                System.out.println("Enter attendance as a number\n");
+                System.out.println("Enter numerical value only\n");
                 invalidInput = true;
             }
-            if((attendance<0 || attendance > 30) && !invalidInput){
-                System.out.println("Enter attendance for 1 month (maximum 30 days)\n");
+            if((value<start || value > end) && !invalidInput){
+                if (end == 30){
+                    System.out.println("Enter value between " + start + " and " + end +" \n");
+                }
+                else{
+                    System.out.println("Enter an available ID to update");
+                }
                 invalidInput = true;
             }
         }while(invalidInput);                
-        return attendance;
+        return value;
     }
 }
 
