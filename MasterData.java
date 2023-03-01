@@ -8,19 +8,20 @@ public class MasterData {
         this.empList = emp;
     }
 
-    public void displayEmployees(){
+    public void displayEmployees(ArrayList<Employee> employees){
         if(this.empList.size()==0){
             System.out.println("No employees to display\n");
         }
         else{
+            System.out.println("-------------------------------------------------------------------------------------------------");
             System.out.format("%10s %20s %20s %20s %20s", "Employee ID", "Name", "Designation", "Department", "Salary");
             System.out.println();
             System.out.println("-------------------------------------------------------------------------------------------------");
-            for (Employee emp : this.empList) {
+            for (Employee emp : employees) {
                 System.out.println(emp.toString());
-                System.out.println();
             }
         }
+        System.out.println();
     }
 
     public ArrayList<Employee> getEmpList(){
