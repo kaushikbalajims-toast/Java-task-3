@@ -32,30 +32,13 @@ public class TestEmployee{
                 ArrayList<Employee> empList = mData.getEmpList();
                 if(empList.size()>0){
                     for (Employee emp : empList){
-                        int attendance = 0;
                         invalidInput = false;
-                        do{
-                            invalidInput = false;
-                            try{
-                                System.out.print("\nEnter attendance for Employee "+emp.getEmpID() + " " + emp.getName() + ": ");
-                                attendance = Integer.parseInt(scin.nextLine());
-                            }
-                            catch(NumberFormatException e){
-                                System.out.println("Enter attendance as a number\n");
-                                invalidInput = true;
-                            }
-                            if((attendance<0 || attendance > 30) && !invalidInput){
-                                System.out.println("Enter attendance for 1 month\n");
-                                invalidInput = true;
-                            }
-                        }while(invalidInput);
-                        empHash.put(emp, attendance);  //valid attendance inserted to hashmap
+                        empHash.put(emp, GetAttendance(emp.getEmpID()));  //valid attendance inserted to hashmap
                     }
                 }
                 else{
                     System.out.println("No employees to add attendance to");
                 }
-
             }
 
             else if(choice == 4){
@@ -87,24 +70,7 @@ public class TestEmployee{
                 else{
                     System.out.println("Old attendence: " + empHash.get(employeeIdMapping.get(idToFind)));
                 }
-                // proper employee id at this point
-                int attendance = 0;
-                do{
-                    invalidInput = false;
-                    try{
-                        System.out.print("New attendance for Employee " + idToFind + " :  ");
-                        attendance = Integer.parseInt(scin.nextLine());
-                    }
-                    catch(NumberFormatException e){
-                        System.out.println("Enter attendance as a number\n");
-                        invalidInput = true;
-                    }
-                    if((attendance<0 || attendance > 30) && !invalidInput){
-                        System.out.println("Enter positive value for attendance\n");
-                        invalidInput = true;
-                    }
-                }while(invalidInput);                
-                empHash.put(employeeIdMapping.get(idToFind), attendance);
+                empHash.put(employeeIdMapping.get(idToFind), GetAttendance(idToFind));
                 isFiltered = false;
             }
 
@@ -207,10 +173,30 @@ public class TestEmployee{
             }
         }while(invalidInput); // proper choice at this point
         return val;
-    } 
+    }
+    
+    public static int GetAttendance(int idToFind){
+        int attendance = 0;
+        boolean invalidInput;
+        Scanner scin1 = new Scanner(System.in);
+        do{
+            invalidInput = false;
+            try{
+                System.out.print("Enter attendance for the employee " + idToFind +":  ");
+                attendance = Integer.parseInt(scin1.nextLine());
+            }
+            catch(NumberFormatException e){
+                System.out.println("Enter attendance as a number\n");
+                invalidInput = true;
+            }
+            if((attendance<0 || attendance > 30) && !invalidInput){
+                System.out.println("Enter attendance for 1 month (maximum 30 days)\n");
+                invalidInput = true;
+            }
+        }while(invalidInput);                
+        return attendance;
+    }
 }
-
-
 
 // Overriding Comparators to sort various features
 class NameSorting implements Comparator<Employee>{
