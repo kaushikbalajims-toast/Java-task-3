@@ -8,17 +8,20 @@ public class MasterData {
         this.empList = emp;
     }
 
-    // public void displayEmployees(){
-    //     if(this.empList.size()==0){
-    //         System.out.println("No employees to display\n");
-    //     }
-    //     else{
-    //         for (Employee emp : this.empList) {
-    //             System.out.println("-----------------------------------");
-    //             System.out.println(emp.toString());
-    //         }
-    //     }
-    // }
+    public void displayEmployees(){
+        if(this.empList.size()==0){
+            System.out.println("No employees to display\n");
+        }
+        else{
+            System.out.format("%10s %20s %20s %20s %20s", "Employee ID", "Name", "Designation", "Department", "Salary");
+            System.out.println();
+            System.out.println("-------------------------------------------------------------------------------------------------");
+            for (Employee emp : this.empList) {
+                System.out.println(emp.toString());
+                System.out.println();
+            }
+        }
+    }
 
     public ArrayList<Employee> getEmpList(){
         return this.empList;

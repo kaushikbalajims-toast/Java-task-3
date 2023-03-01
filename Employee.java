@@ -9,15 +9,6 @@ class Employee{
     private double salary;
 
     Employee(){
-        this.empID = counter++;
-    }
-
-    Employee(String name, String dept, String desg, double sal){
-        this.name = name;
-        this.designation = desg;
-        this.department = dept;
-        this.salary = sal;
-        this.empID = counter++;
     }
 
     public int getEmpID(){
@@ -40,8 +31,14 @@ class Employee{
         this.empID = id;
     }
     public void setName(String name){
+        boolean starting = true;
         Scanner sc = new Scanner(System.in);
         while(true){
+            if(starting == true){
+                System.out.print("Enter name: ");
+                name = sc.nextLine();
+                starting = false;
+            }
             if(name.matches("^[A-Z][a-zA-Z ]+")){
                 break;
             }
@@ -52,13 +49,20 @@ class Employee{
             }
         }
         this.name = name;
+        this.empID = counter++;
     }
     public void setDesg(String desg){
-        String[] designation_array = {"Manager", "Senior developer", "Software developer", "Intern"};
+        String[] designation_array = {"Manager", "Tester", "Software Dev", "Intern"};
         Scanner scin = new Scanner(System.in);
+        boolean starting = true;
         boolean invalidInput = false;
         int desg_choice = 0;
         do{
+            if(starting == true){
+                System.out.print("\nDesignation choice\n1.Manager\n2.Tester\n3.Software Developer\n4.Intern\nEnter designation choice: ");
+                desg = scin.nextLine();
+                starting = false;
+            }
             invalidInput = false;
             try{
                 desg_choice = Integer.parseInt(desg);
@@ -66,12 +70,12 @@ class Employee{
             catch(NumberFormatException e){
                 System.out.println("Enter only one integer option\n");
                 invalidInput = true;
-                System.out.print("Designation choice\n1.Manager\n2.Senior developer\n3.Software developer\n4.Intern\nEnter designation choice: ");
+                System.out.print("Designation choice\n1.Manager\n2.Tester\n3.Software Developer\n4.Intern\nEnter designation choice: ");
                 desg = scin.nextLine();
             }
             if((desg_choice>4 || desg_choice<0) && !invalidInput){
                 System.out.println("Enter an available option (1-4)\n");
-                System.out.print("Designation choice\n1.Manager\n2.Senior developer\n3.Software developer\n4.Intern\nEnter designation choice: ");
+                System.out.print("Designation choice\n1.Manager\n2.Tester\n3.Software Developer\n4.Intern\nEnter designation choice: ");
                 invalidInput = true;
                 desg = scin.nextLine();
             }
@@ -82,8 +86,14 @@ class Employee{
         String[] department_array = {"R & D", "IT", "Admin", "HR", "Support"};
         Scanner scin = new Scanner(System.in);
         boolean invalidInput;
+        boolean starting = true;
         int dept_choice = 0;
         do{
+            if(starting){
+                System.out.print("\nDepartment choices \n1.R & D\n2.IT\n3.Admin\n4.HR\n5.Support\nEnter department choice: ");
+                dept = scin.nextLine();
+                starting = false;
+            }
             invalidInput = false;
                 try{
                     dept_choice = Integer.parseInt(dept);
@@ -104,7 +114,33 @@ class Employee{
         this.department = department_array[dept_choice-1];
     }
     public void setSal(double sal){
+        Scanner scin = new Scanner(System.in);
+        boolean invalidInput;
+        boolean starting = true;
+
+        do{
+            invalidInput = false;
+            if(starting == true){
+                System.out.print("Enter Salary: ");
+                starting = false;
+            }
+            try{
+                sal = Double.parseDouble(scin.nextLine());
+            }
+            catch(NumberFormatException e){
+                System.out.println("Enter valid salary");
+                invalidInput = true;
+                System.out.print("Enter Salary: ");
+            }
+            if(sal < 10000 && invalidInput!=true){
+                System.out.println("Enter more than 4 figure salary");
+                invalidInput = true;
+                System.out.print("Enter Salary: ");
+            }
+        }while(invalidInput);
+
         this.salary = sal;
+        this.SetAllowance();
     }
 
     public void SetAllowance(){
@@ -117,12 +153,6 @@ class Employee{
     }
     @Override
     public String toString(){
-        System.out.println("-------------------------------------------------");
-        if(this.designation.compareTo("Manager") == 0){
-            return ("\nID:\t\t\t" + this.empID + "\nName:\t\t\t" + this.name + "\nDesignation:\t\t" + this.designation + "\nDepartment:\t\t" + this.department + "\n\nSalary with allowance\t" + this.salary + "\nEmployee allowance:\t" + (this.salary*2/12) + "\n");
-        }
-        else{
-            return ("\nID:\t\t\t" + this.empID + "\nName:\t\t\t" + this.name + "\nDesignation:\t\t" + this.designation + "\nDepartment:\t\t" + this.department + "\n\nSalary with allowance\t" + this.salary + "\nEmployee allowance:\t" + (this.salary/11) + "\n");
-        }
+        return String.format("%10s %20s %20s %20s %20s", this.getEmpID(),this.getName(), this.getDesg(), this.getDept(), this.getSal());
     }
 }
