@@ -8,7 +8,7 @@ public class MasterData {
         this.empList = emp;
     }
 
-    public void displayEmployees(ArrayList<Employee> employees){
+    public void displayEmployees(){
         if(this.empList.size()==0){
             System.out.println("No employees to display\n");
         }
@@ -17,7 +17,7 @@ public class MasterData {
             System.out.format("%10s %20s %20s %20s %20s", "Employee ID", "Name", "Designation", "Department", "Salary");
             System.out.println();
             System.out.println("-------------------------------------------------------------------------------------------------");
-            for (Employee emp : employees) {
+            for (Employee emp : this.empList) {
                 System.out.println(emp.toString());
             }
             System.out.println("-------------------------------------------------------------------------------------------------");
