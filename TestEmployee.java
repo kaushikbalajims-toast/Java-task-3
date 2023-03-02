@@ -4,7 +4,7 @@ public class TestEmployee{
     public static void main(String[] args) {
         ArrayList<Employee> employees = new ArrayList<Employee>();
         int choice = 1, idToFind = 0;
-        boolean invalidInput = false, isFiltered = false;
+        boolean isFiltered = false;
         HashMap<Employee,Integer> empHash = new HashMap<Employee, Integer>();
         HashMap<Integer, Employee> employeeIdMapping = new HashMap<Integer, Employee>();
         
@@ -13,7 +13,7 @@ public class TestEmployee{
         
         while(true){
             Employee employee = new Employee();
-            String menuOptions = "\n---- Menu ----\n1.Add employees\n2.Display Employees list\n3.Add all employee attendance\n4.Update Attendance for an Employee ID\n5.Show Eligible Employees\n6.Filter Employees\n7.sort\n8.Provide salary\n9.Exit\nEnter choice: ";
+            String menuOptions = "\n---- Menu ----\n1.Add employees\n2.Display Employees list\n3.Add all employee attendance\n4.Update Attendance for an Employee ID\n5.Filter and show Eligible employees\n6.sort\n7.Provide salary\n8.Exit\nEnter choice: ";
             choice = ValidMenuOption(menuOptions, 1, 9);
             if(choice == 1){      // when adding employee
                 employee.setName(""); //to validate name
@@ -22,17 +22,17 @@ public class TestEmployee{
                 employee.setSal(0);  //to set the correct salary
                 employeeIdMapping.put(employee.getEmpID(), employee);
                 employees.add(employee);
+                isFiltered = false;
                 System.out.println();
             }
             else if(choice == 2){
-                mData.displayEmployees(employees);    
+                mData.displayEmployees();    
             }
 
             else if(choice == 3){
                 ArrayList<Employee> empList = mData.getEmpList();
                 if(empList.size()>0){
                     for (Employee emp : empList){
-                        invalidInput = false;
                         empHash.put(emp, GetAttendanceAndID(emp.getEmpID(), 1, 30));  //valid attendance inserted to hashmap
                     }
                 }
@@ -47,41 +47,35 @@ public class TestEmployee{
                 }
                 else{
                     idToFind = GetAttendanceAndID(0, 1001, employees.size()+1000);
-                    if(empHash.get(employeeIdMapping.get(idToFind)) == null){
-                        System.out.println("\nOld attendence: 0 days");
-                    }
-                    else{
-                        System.out.println("Old attendence: " + empHash.get(employeeIdMapping.get(idToFind)));
-                    }
                     empHash.put(employeeIdMapping.get(idToFind), GetAttendanceAndID(idToFind, 1, 30));
                     isFiltered = false;
                 }
             }
 
             else if(choice == 5){
-                if(empHash.size() > 0){
-                    AttendanceMaster am = new AttendanceMaster(empHash);
-                    am.showEligibleList();
-                }
-                else{
-                    System.out.println("Attendance not entered for any employees\n");
-                }
-            }
-            else if(choice == 6){
                 AttendanceMaster am = new AttendanceMaster(empHash);
-                if(am.getEmpAtten().size()!=0){
-                    am.FilterEmployeeList();
-                    isFiltered = true;
-                    System.out.println("Eligible employees after filtering\n");
-                    ArrayList<Employee> temp = new ArrayList<Employee>(am.getEmpAtten().keySet());
-                    mData.displayEmployees(temp);
+                if(employees.size()!=0){
+                    if(am.getEmpAtten().size()!=0){
+                        am.FilterEmployeeList();
+                        isFiltered = true;
+                        if( am.getEmpAtten().size()!=0 ){
+                            System.out.println("Filtered Employees list\n");
+                            am.showEligibleList();  
+                        }
+                        else{
+                            System.out.println("No eligible employees\n");
+                        }
+                    }
+                    else if(am.getEmpAtten().size() != employees.size()){
+                        System.out.println("Provide attendance for all available employees ..... choose menu choice 3 to add attendance\n");
+                    }
                 }
                 else{
-                    System.out.println("Filter employees after providing attendance ..... choose menu choice 3 to add attendance\n");
+                    System.out.println("Add employees before filtering ... choice 1 to add");
                 }
             }
 
-            else if(choice == 7){
+            else if(choice == 6){
                 int sortChoice = 0;
                 if(employees.size()!=0){
                     while(true){
@@ -109,7 +103,7 @@ public class TestEmployee{
                             else if(sortChoice == 6){
                                 Collections.sort(employees, new DepartmentSorting().reversed());
                             }
-                            mData.displayEmployees(employees);
+                            mData.displayEmployees();
                         }
                     }    
                 }
@@ -118,17 +112,22 @@ public class TestEmployee{
                 }
             }
 
-            else if(choice == 8){
-                if(isFiltered){
-                    SalCalculator salCalc = new SalCalculator();
-                    salCalc.CalculateSalary(empHash);
+            else if(choice == 7){
+                if(employees.size()!=0){
+                    if(isFiltered){
+                        SalCalculator salCalc = new SalCalculator();
+                        salCalc.CalculateSalary(empHash);
+                    }
+                    else{
+                        System.out.println("Filter employees before providing salary ..... 5 to filter employees");
+                    }
                 }
                 else{
-                    System.out.println("Filter employees before providing salary ..... 6 to filter employees");
+                    System.out.println("Enter atleast 1 employee to add salary\n");
                 }
             }
 
-            else if(choice == 9){
+            else if(choice == 8){
                 System.out.println("Bye Bye");
                 scin.close();
                 System.exit(0);
