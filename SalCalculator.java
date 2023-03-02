@@ -7,8 +7,8 @@ class SalCalculator{
 
     public void CalculateSalary(HashMap<Employee, Integer> empAttendance){
         if(empAttendance.keySet().size()!=0){
-            System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-            System.out.format("%10s %20s %20s %20s %20s %20s %20s %20s %20s", "Employee ID", "Name", "Designation", "Department", "Salary", "Allowance", "PF", "Gross Salary", "Net Salary");
+            System.out.println("Employees payslip\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.format("%10s %15s %20s %20s %15s %15s %15s %15s %15s %15s", "Employee ID", "Name", "Designation", "Department", "Salary", "Attendance", "Allowance", "PF", "Gross Salary", "Net Salary");
             System.out.println();
             System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             for(Employee emp: empAttendance.keySet()){
@@ -24,9 +24,9 @@ class SalCalculator{
                     allowance = sal*10/100;
                     pf = allowance;
                 }
-                grossSalary = emp.getSal() + allowance;
+                grossSalary = sal + allowance;
                 netSalary = grossSalary - pf;
-                System.out.format("%10s %20s %20s %20s %20s %20s %20s %20s %20s", emp.getEmpID(),emp.getName(), emp.getDesg(), emp.getDept(), sal, allowance,pf, grossSalary, netSalary);
+                System.out.format("%10s %15s %20s %20s %15s %15s %15s %15s %15s %15s", emp.getEmpID(),emp.getName(), emp.getDesg(), emp.getDept(), sal, empAttendance.get(emp), allowance,pf, grossSalary, netSalary);
                 System.out.println();
             }
             System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
