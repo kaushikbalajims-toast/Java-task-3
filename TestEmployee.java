@@ -3,17 +3,17 @@ import java.util.*;
 public class TestEmployee{
     public static void main(String[] args) {
         ArrayList<Employee> employees = new ArrayList<Employee>();
-        int choice = 1, idToFind = 0;
+        int choice = 1, idToFind = 0, attendanceGiven = 0, lastIdAdded = 0;
         boolean isFiltered = false;
         HashMap<Employee,Integer> empHash = new HashMap<Employee, Integer>();
         HashMap<Integer, Employee> employeeIdMapping = new HashMap<Integer, Employee>();
-        
+        ArrayList<Employee> employeesToAddAttendance = new ArrayList<Employee>();
         MasterData mData = new MasterData(employees);
         Scanner scin = new Scanner(System.in);
         
         while(true){
             Employee employee = new Employee();
-            String menuOptions = "\n---- Menu ----\n1.Add employees\n2.Display Employees list\n3.Add all employee attendance\n4.Update Attendance for an Employee ID\n5.Filter and show Eligible employees\n6.sort\n7.Provide salary\n8.Exit\nEnter choice: ";
+            String menuOptions = "\n---- Menu ----\n1.Add employees\n2.Display Employees list\n3.Add attendance to newly inserted employees\n4.Update Attendance for an Employee ID\n5.Filter and show Eligible employees\n6.sort\n7.Provide salary\n8.Exit\nEnter choice: ";
             choice = ValidMenuOption(menuOptions, 1, 9);
             if(choice == 1){      // when adding employee
                 employee.setName(""); //to validate name
@@ -22,7 +22,9 @@ public class TestEmployee{
                 employee.setSal(0);  //to set the correct salary
                 employeeIdMapping.put(employee.getEmpID(), employee);
                 employees.add(employee);
+                employeesToAddAttendance.add(employee);
                 isFiltered = false;
+                lastIdAdded = employee.getEmpID();
                 System.out.println();
             }
             else if(choice == 2){
@@ -30,14 +32,16 @@ public class TestEmployee{
             }
 
             else if(choice == 3){
-                ArrayList<Employee> empList = mData.getEmpList();
-                if(empList.size()>0){
-                    for (Employee emp : empList){
+                // ArrayList<Employee> empList = mData.getEmpList();
+                if(employeesToAddAttendance.size()>0){
+                    for (Employee emp : employeesToAddAttendance){
                         empHash.put(emp, GetAttendanceAndID(emp.getEmpID(), 1, 30));  //valid attendance inserted to hashmap
+                        attendanceGiven+=1;
                     }
+                    employeesToAddAttendance.clear();
                 }
                 else{
-                    System.out.println("No employees to add attendance to");
+                    System.out.println("No new employees to add attendance to");
                 }
             }
 
@@ -47,6 +51,12 @@ public class TestEmployee{
                 }
                 else{
                     idToFind = GetAttendanceAndID(0, 1001, employees.size()+1000);
+                    if(idToFind>lastIdAdded){
+                        attendanceGiven++;
+                    }
+                    else{
+                        employeesToAddAttendance.remove(employeeIdMapping.get(idToFind));
+                    }
                     empHash.put(employeeIdMapping.get(idToFind), GetAttendanceAndID(idToFind, 1, 30));
                     isFiltered = false;
                 }
@@ -55,7 +65,7 @@ public class TestEmployee{
             else if(choice == 5){
                 AttendanceMaster am = new AttendanceMaster(empHash);
                 if(employees.size()!=0){
-                    if(am.getEmpAtten().size()!=0){
+                    if(attendanceGiven==employees.size()){
                         am.FilterEmployeeList();
                         isFiltered = true;
                         if( am.getEmpAtten().size()!=0 ){
@@ -66,7 +76,7 @@ public class TestEmployee{
                             System.out.println("No eligible employees\n");
                         }
                     }
-                    else if(am.getEmpAtten().size() != employees.size()){
+                    else if(attendanceGiven != employees.size()){
                         System.out.println("Provide attendance for all available employees ..... choose menu choice 3 to add attendance\n");
                     }
                 }
