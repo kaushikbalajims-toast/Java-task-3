@@ -3,12 +3,13 @@ import java.util.*;
 public class TestEmployee{
     public static void main(String[] args) {
         ArrayList<Employee> employees = new ArrayList<Employee>();
-        int choice = 1, idToFind = 0, attendanceGiven = 0, lastIdAdded = 0;
+        int choice = 1, idToFind = 0;
         boolean isFiltered = false;
         HashMap<Employee,Integer> empHash = new HashMap<Employee, Integer>();
         HashMap<Integer, Employee> employeeIdMapping = new HashMap<Integer, Employee>();
         ArrayList<Employee> employeesToAddAttendance = new ArrayList<Employee>();
         MasterData mData = new MasterData(employees);
+        AttendanceMaster am = new AttendanceMaster(empHash);
         Scanner scin = new Scanner(System.in);
         
         while(true){
@@ -24,19 +25,16 @@ public class TestEmployee{
                 employees.add(employee);
                 employeesToAddAttendance.add(employee);
                 isFiltered = false;
-                lastIdAdded = employee.getEmpID();
                 System.out.println();
             }
             else if(choice == 2){
                 mData.displayEmployees();    
             }
-
+            
             else if(choice == 3){
-                // ArrayList<Employee> empList = mData.getEmpList();
                 if(employeesToAddAttendance.size()>0){
                     for (Employee emp : employeesToAddAttendance){
                         empHash.put(emp, GetAttendanceAndID(emp.getEmpID(), 1, 30));  //valid attendance inserted to hashmap
-                        attendanceGiven+=1;
                     }
                     employeesToAddAttendance.clear();
                 }
@@ -51,21 +49,15 @@ public class TestEmployee{
                 }
                 else{
                     idToFind = GetAttendanceAndID(0, 1001, employees.size()+1000);
-                    if(idToFind>lastIdAdded){
-                        attendanceGiven++;
-                    }
-                    else{
-                        employeesToAddAttendance.remove(employeeIdMapping.get(idToFind));
-                    }
+                    employeesToAddAttendance.remove(employeeIdMapping.get(idToFind));
                     empHash.put(employeeIdMapping.get(idToFind), GetAttendanceAndID(idToFind, 1, 30));
                     isFiltered = false;
                 }
             }
 
             else if(choice == 5){
-                AttendanceMaster am = new AttendanceMaster(empHash);
                 if(employees.size()!=0){
-                    if(attendanceGiven==employees.size()){
+                    if(employeesToAddAttendance.size()==0){
                         am.FilterEmployeeList();
                         isFiltered = true;
                         if( am.getEmpAtten().size()!=0 ){
@@ -76,7 +68,7 @@ public class TestEmployee{
                             System.out.println("No eligible employees\n");
                         }
                     }
-                    else if(attendanceGiven != employees.size()){
+                    else{
                         System.out.println("Provide attendance for all available employees ..... choose menu choice 3 to add attendance\n");
                     }
                 }
