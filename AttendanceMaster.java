@@ -13,16 +13,21 @@ public class AttendanceMaster {
     public void showEligibleList(){
         System.out.println("Eligible employees\n");
         ArrayList<Employee> emList = new ArrayList<Employee>(this.empAtten.keySet());
-        System.out.println("-------------------------------------------------------------------------------------------------");
-        System.out.format("%10s %20s %20s %20s %20s", "Employee ID", "Name", "Designation", "Department", "Salary");
-        System.out.println();
-        System.out.println("-------------------------------------------------------------------------------------------------");
-        for (Employee emp : emList) {
-            if(this.empAtten.get(emp) > 9){
-                System.out.println(emp.toString());
-            }
+        if(emList.size()==0){
+            System.out.println("No Eligible Employees\n");
         }
-        System.out.println("-------------------------------------------------------------------------------------------------");
+        else{
+            System.out.println("-------------------------------------------------------------------------------------------------");
+            System.out.format("%10s %20s %20s %20s %20s", "Employee ID", "Name", "Designation", "Department", "Salary");
+            System.out.println();
+            System.out.println("-------------------------------------------------------------------------------------------------");
+            for (Employee emp : emList) {
+                if(this.empAtten.get(emp) > 9){
+                    System.out.println(emp.toString());
+                }
+            }
+            System.out.println("-------------------------------------------------------------------------------------------------");    
+        }
     }
 
     public void FilterEmployeeList(){
