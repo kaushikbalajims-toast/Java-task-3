@@ -7,10 +7,10 @@ class SalCalculator{
 
     public void CalculateSalary(HashMap<Employee, Integer> empAttendance){
         if(empAttendance.keySet().size()!=0){
-            System.out.println("Employees payslip\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-            System.out.format("%10s %15s %20s %20s %15s %15s %15s %15s %15s %15s", "Employee ID", "Name", "Designation", "Department", "Salary", "Attendance", "Allowance", "PF", "Gross Salary", "Net Salary");
+            System.out.println("\t\t\t\t\tEmployees payslip\n---------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.format("%5s %12s %18s %15s %13s %13s %13s %10s %13s %13s", "ID", "Name", "Designation", "Department", "Salary", "Attendance", "Allowance", "PF", "Gross", "Net");
             System.out.println();
-            System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.println("---------------------------------------------------------------------------------------------------------------------------------------");
             for(Employee emp: empAttendance.keySet()){
                 double pf, sal;
                 double allowance = 0, grossSalary = 0, netSalary = 0;
@@ -26,10 +26,13 @@ class SalCalculator{
                 }
                 grossSalary = sal + allowance;
                 netSalary = grossSalary - pf;
-                System.out.format("%10s %15s %20s %20s %15s %15s %15s %15s %15s %15s", emp.getEmpID(),emp.getName(), emp.getDesg(), emp.getDept(), sal, empAttendance.get(emp), allowance,pf, grossSalary, netSalary);
+                System.out.format("%5s %15s %13s %15s %15s %9s %15s %13s %13s %13s", emp.getEmpID(),emp.getName(), emp.getDesg(), emp.getDept(), sal, empAttendance.get(emp), allowance,pf, grossSalary, netSalary);
                 System.out.println();
             }
-            System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.println("---------------------------------------------------------------------------------------------------------------------------------------");
+        }
+        else{
+            System.out.println("No eligible employees\n");
         }
     }
 }
