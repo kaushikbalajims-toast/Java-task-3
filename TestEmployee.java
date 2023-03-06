@@ -60,13 +60,8 @@ public class TestEmployee{
                     if(employeesToAddAttendance.size()==0){
                         am.FilterEmployeeList();
                         isFiltered = true;
-                        if( am.getEmpAtten().size()!=0 ){
-                            System.out.println("Filtered Employees list\n");
-                            am.showEligibleList();  
-                        }
-                        else{
-                            System.out.println("No eligible employees\n");
-                        }
+                        System.out.println("Filtered Employees list\n");
+                        am.showEligibleList();  
                     }
                     else{
                         System.out.println("Provide attendance for all available employees ..... choose menu choice 3 to add attendance\n");
