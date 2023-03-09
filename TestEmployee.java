@@ -45,7 +45,7 @@ public class TestEmployee{
 
             else if(choice == 4){
                 if(employees.size() == 0){
-                    System.out.println("No employee to update attendance to");
+                    System.out.println("No employees available to update attendance to");
                 }
                 else{
                     idToFind = GetAttendanceAndID(0, 1001, employees.size()+1000);
@@ -65,7 +65,7 @@ public class TestEmployee{
                     }
                     else{
                         System.out.println("Provide attendance for all available employees ..... choose menu choice 3 to add attendance\n");
-                    }
+                    }  
                 }
                 else{
                     System.out.println("Add employees before filtering ... choice 1 to add");
@@ -83,21 +83,27 @@ public class TestEmployee{
                         }
                         else{
                             if(sortChoice == 1){
+                                System.out.println("\nSort by Name (Ascending)");
                                 Collections.sort(employees, new NameSorting());
                             }
                             else if(sortChoice == 2){
+                                System.out.println("\nSort by Name (Descending)");
                                 Collections.sort(employees, new NameSorting().reversed());
                             }
                             else if(sortChoice == 3){
+                                System.out.println("\nSort by Designation (Ascending)");
                                 Collections.sort(employees, new DesignationSorting());
                             }
                             else if(sortChoice == 4){
+                                System.out.println("\nSort by Designation (Descending)");
                                 Collections.sort(employees, new DesignationSorting().reversed());
                             }
                             else if(sortChoice == 5){
+                                System.out.println("\nSort by Department (Ascending)");
                                 Collections.sort(employees, new DepartmentSorting());
                             }
                             else if(sortChoice == 6){
+                                System.out.println("\nSort by Department (Descending)");
                                 Collections.sort(employees, new DepartmentSorting().reversed());
                             }
                             mData.displayEmployees();
